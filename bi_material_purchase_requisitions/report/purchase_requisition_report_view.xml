@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+
+        <template id="purchase_requisition_template_view">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <hr/>
+                    <div id="layout1" style="height:400px;">
+                             <div class="row">
+
+                        <div class="col-lg">
+                            <h4 style="text-align:center;">Memot Requisition</h4>
+                        </div>
+
+                        </div>
+                        <br/>
+                         <div class="row">
+                        <div class="col-12">
+                        <div class="pull-left">
+                            <p style="text-align : left;" class="text-nowrap"><strong>Requisition No: </strong><span t-field="o.sequence"/><br/>
+                            <strong>Request Date: </strong><span t-field="o.requisition_date"/></p>
+
+                        </div>
+                        <div class="pull-right">
+
+                            <p><strong>Status: </strong><span t-field="o.state"/><br/>
+                                <strong> <span t-field="o.request_type"/></strong><br/>
+                            </p>
+                        </div>
+
+                        </div>
+                        <hr/>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <strong>Subject: </strong> <span t-field="o.subject"/>
+                        </div>
+                    </div>
+                    <br/>
+                    <table class="table table-sm table-bordered" style="font-size:90%">
+                        <tr>
+                            <td>
+                                <strong>Description (Khmer)</strong>
+                               <br/>
+                               <span class="" style="height:auto" t-field="o.reason_for_requisition_kh" />
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table class="table table-sm table-bordered" style="font-size:90%">
+                        <tr>
+                            <td>
+                                <strong>Description (English)</strong>
+                               <br/>
+                               <span class="" style="height:auto" t-field="o.reason_for_requisition" />
+                            </td>
+                        </tr>
+                    </table>
+
+                    </div>
+
+                    <div id="layout2" style="height:250px">
+                        <div t-if="o.requisition_line_ids">
+                    <strong>Requisition Detail</strong>
+                    <table class="table table-sm table-bordered" style="font-size:90%">
+                        <thead>
+                            <tr>
+<!--                                <th>Requisition Action</th>-->
+                                <th>Product</th>
+                                <th>Description</th>
+                                <th>Quantity</th>
+                                <th>UOM</th>
+                                <th class="text-center">Unit Price</th>
+                                <th class="text-center">Extended Cost</th>
+                                <!-- <th>Vendors</th> -->
+                            </tr>
+                        </thead>
+                        <tbody class="consumed_tbody">
+                            <t t-foreach="o.requisition_line_ids" t-as="requisition">
+                            <tr>
+<!--                                <td>-->
+<!--                                    <span t-field="requisition.requisition_action" />-->
+<!--                                </td>-->
+                                <td>
+                                    <span t-field="requisition.product_id.name" />
+                                </td>
+                                <td>
+                                    <span t-field="requisition.description" />
+                                </td>
+                                <td>
+                                    <span t-field="requisition.qty" />
+                                </td>
+                                <td>
+                                    <span t-field="requisition.uom_id.name" />
+                                </td>
+                                <td class="text-right">
+<!--                                    <span t-field="requisition.price" />-->
+                                     <t t-esc="'{0:,.2f}'.format(int(requisition.price))" />
+                                </td>
+                                <td class="text-right">
+<!--                                    <span t-field="requisition.amount" />-->
+                                    <t t-esc="'{0:,.2f}'.format(int(requisition.amount))" />
+                                </td>
+                                <!-- <td>
+                                    <span t-field="requisition.vendor_id.name" />
+                                </td> -->
+                            </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    </div>
+                     </div>
+                    <div id="layout3" style="height:400px;">
+                            <strong>Approval Information</strong>
+
+                    <table class="table table-sm table-borderless" style="font-size:90%">
+
+                        <tr style="padding: 8px;text-align: left;height:50%;" class="p-3">
+                            <td><strong >Requested by: </strong> </td>
+                            <td  style="border-bottom: 1px solid #ddd;"><span t-field="o.employee_id.name"/></td>
+                            <td width="10px"> </td>
+                            <td><strong >Requested date : </strong> </td>
+                            <td  style="border-bottom: 1px solid #ddd;"><span t-field="o.requisition_date" /></td>
+                        </tr>
+
+<!--                        <tr style="padding: 8px;text-align: left;border-top: 1px solid #ddd;">-->
+<!--                            <td><strong >Department : </strong> </td>-->
+<!--                            <td><span t-field="o.department_id.name" /></td>-->
+
+<!--                            <td><strong >Requisition Deadline</strong> </td>-->
+<!--                            <td><span t-field="o.requisition_deadline_date" /></td>-->
+<!--                        </tr>-->
+
+                        <tr style="padding: 8px;text-align: left;">
+                            <td><strong >Department Checked by: </strong> </td>
+                            <td  style="border-bottom: 1px solid #ddd;"><span t-field="o.department_manager_id.name" /></td>
+                            <td width="10px"> </td>
+                            <td><strong >Department Checked date: </strong> </td>
+                            <td  style="border-bottom: 1px solid #ddd;"><span t-field="o.department_approval_date" /></td>
+
+                        </tr>
+
+                         <tr style="padding: 8px;text-align: left;">
+                            <td><strong >1st Director Reviewed: </strong> </td>
+                            <td style="border-bottom: 1px solid #ddd;"><span t-field="o.director_id.name" /></td>
+                            <td width="10px"> </td>
+                            <td><strong>1st Director Reviewed Date : </strong> </td>
+                            <td  style="border-bottom: 1px solid #ddd;"><span t-field="o.director_approval_date" /></td>
+
+                        </tr>
+                        <tr t-if="o.comment_director1">
+                            <td><strong>1st Director Comment: </strong> </td>
+                            <td colspan="4" style="border-bottom: 1px solid #ddd;">
+                                <span t-field="o.comment_director1"/>
+                            </td>
+                        </tr>
+
+                         <tr t-if="o.director_approval_date1 is not False" style="padding: 8px;text-align: left;">
+                            <td><strong >2nd Director Reviewed : </strong> </td>
+                            <td style="border-bottom: 1px solid #ddd;"><span t-field="o.director_id_1.name" /></td>
+                            <td width="10px"> </td>
+                            <td><strong >2nd Director Reviewed Date : </strong> </td>
+                            <td  style="border-bottom: 1px solid #ddd;"><span t-field="o.director_approval_date1" /></td>
+
+                        </tr>
+                        <tr t-if="o.comment_director2">
+                            <td><strong >2nd Director Comment: </strong> </td>
+                            <td colspan="4" style="border-bottom: 1px solid #ddd;">
+                                <span t-field="o.comment_director2"/>
+                            </td>
+                        </tr>
+
+                          <tr t-if="o.director_approval_date2 is not False" style="padding: 8px;text-align: left;">
+                            <td><strong >3rd Director Reviewed : </strong> </td>
+                            <td  style="border-bottom: 1px solid #ddd;"><span t-field="o.director_id_2.name" /></td>
+                            <td width="10px"> </td>
+                            <td><strong >3rd Director Reviewed Date : </strong> </td>
+                            <td  style="border-bottom: 1px solid #ddd;"><span t-field="o.director_approval_date2" /></td>
+
+                        </tr>
+
+                         <tr t-if="o.dmd_approval_date is not False" style="padding: 8px;text-align: left;">
+                            <td><strong >DMD Reviewed : </strong> </td>
+                            <td style="border-bottom: 1px solid #ddd;"><span t-field="o.dmd_approval_id.name" /></td>
+                            <td width="10px"> </td>
+                            <td><strong >DMD Reviewed Date : </strong> </td>
+                            <td style="border-bottom: 1px solid #ddd;"><span t-field="o.dmd_approval_date" /></td>
+
+                        </tr>
+
+                        <tr t-if="o.comment_dmd">
+                            <td><strong >DMD Comment: </strong> </td>
+                            <td colspan="4" style="border-bottom: 1px solid #ddd;">
+                                <span t-field="o.comment_dmd"/>
+                            </td>
+                        </tr>
+
+                         <tr t-if="o.approved_date is not False" style="padding: 8px;text-align: left;">
+                            <td><strong >MD Approved : </strong> </td>
+                            <td style="border-bottom: 1px solid #ddd;"><span t-field="o.approved_by_id.name" /></td>
+                            <td width="10px"> </td>
+                            <td><strong >MD Approved Date : </strong> </td>
+                            <td style="border-bottom: 1px solid #ddd;"><span t-field="o.approved_date" /></td>
+
+                        </tr>
+                        <tr t-if="o.comment_md">
+                            <td><strong >MD Comment: </strong> </td>
+                            <td colspan="4" style="border-top:0;border-bottom: 1px solid #ddd;">
+                                <span t-field="o.comment_md"/>
+                            </td>
+                        </tr>
+                        <tr t-if="o.rejected_date is not False" style="padding: 8px;text-align: left;">
+                            <td><strong >Rejected By : </strong> </td>
+                            <td><span t-field="o.rejected_by.name" /></td>
+                            <td width="10px"> </td>
+                            <td><strong>Rejected Date : </strong> </td>
+                            <td><span t-field="o.rejected_date" /></td>
+
+                        </tr>
+                    </table>
+                    </div>
+
+                </div>
+            </t>
+        </template>
+
+        <template id="purchase_requisition_temp_id">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="bi_material_purchase_requisitions.purchase_requisition_template_view" />
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>
+

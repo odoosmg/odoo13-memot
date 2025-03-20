@@ -1,0 +1,40 @@
+
+.signature_font1 {
+    font-family: Khmer OS Muol;
+    font-size:11px;
+}
+
+.header_font1 {
+   font-family: Khmer OS Muol;
+}
+
+.table_font1 th, .table_font1 td{
+    font-size: 12px;
+}
+
+
+
+.imageContainer {
+  width: 120px;
+  height: 75px;
+  overflow: hidden;
+  position: relative;
+  margin:0px;
+
+}
+.imageCenterer {
+
+  height:75px;
+  width:100%;
+  position: absolute;
+  left: -8px;
+  top: -2px;
+
+}
+.imageCenterer img {
+  display: block;
+  margin: 0;
+  left:0px;
+  height:100%;
+
+}

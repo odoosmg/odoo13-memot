@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <report id="purchase_requisition_report_id"
+				string="Purchase Requisition"
+				model="material.purchase.requisition"
+				report_type="qweb-html"
+				file="bi_material_purchase_requisitions.purchase_requisition_template_view"
+				name="bi_material_purchase_requisitions.purchase_requisition_template_view"
+                paperformat="custom_invoice.report_a5_nologo"
+        />
+
+		 <template id="bi_material_purchase_requisitions.report_assets_common" name="bi_material_purchase_requisitions_report_assets_common" inherit_id="web.report_assets_common">
+            <xpath expr="." position="inside">
+                <link href="bi_material_purchase_requisitions/static/src/css/purchase_styles.css" rel="stylesheet"/>
+            </xpath>
+        </template>
+
+        <template id="purchase_requisition_template_view">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+            <t t-call="custom_invoice.custom_invoice_external_layout_noheader" t-lang="en_US">
+                <div class="page">
+                    <div style="height:3px"></div>
+                        <div class="text-center">
+                        <h6 class="header_font1">
+                            ប័ណ្ណស្នើសុំចំណាយ
+                        </h6>
+                        <h6>
+                            PURCHASE REQUISITION
+                        </h6>
+                        </div>
+
+
+                    <div class="row signature_font1">
+
+                    <div class="col-9">
+
+                        <div class="checkboxes">
+                            <label class="lbl-width-70" for="campus"><span>Campus</span> </label>
+                            <label for="x"><input type="checkbox" id="x" /> <span>MC</span></label>
+                            <label for="y"><input type="checkbox" id="y" /> <span>CC</span></label>
+                        </div>
+                        <div class="clear"/>
+                       <div class="checkboxes">
+                            <label class="lbl-width-70" for="campus"><span>Department</span> </label>
+                            <label for="x"><input type="checkbox" id="a" /> <span>IS</span></label>
+                            <label for="y"><input type="checkbox" id="b" /> <span>A&amp;F</span></label>
+                            <label for="y"><input type="checkbox" id="c" /> <span>ADM</span></label>
+                            <label for="y"><input type="checkbox" id="d" /> <span>ICT</span></label>
+                            <label for="y"><input type="checkbox" id="f" /> <span>CT</span></label>
+                        </div>
+
+
+                    </div>
+
+
+
+                     <div class="col-3 text-left text-nowrap">
+                        <div class="checkboxes">
+                            <label class="lbl-width-90" for="campus"><span>Requisition No:</span> </label>
+                            <label><span t-field="o.sequence"/></label>
+                        </div>
+                         <div class="clear"></div>
+                        <div class="checkboxes">
+                            <label class="lbl-width-90" for="campus"><span>Requisition Date:</span> </label>
+                            <label><span t-field="o.requisition_date"/></label>
+                        </div>
+                         <div class="clear"></div>
+                        <div class="checkboxes">
+                           <label class="lbl-width-90" for="campus"><span>Expiration Date:</span> </label>
+                            <label></label>
+                        </div>
+                        <div class="clear"></div>
+                          <div class="checkboxes">
+                           <label class="lbl-width-90" for="campus"><span>Date Required:</span> </label>
+                            <label><span t-field="o.received_date"/></label>
+                        </div>
+                        <div class="clear"></div>
+                          <div class="checkboxes">
+                           <label class="lbl-width-90" for="campus"><span>Exchange Rate:</span> </label>
+                            <label><span t-field="o.currency_id.name"/> <span t-esc="'%.2f'% o.currency_rate"/></label>
+                        </div>
+                     </div>
+
+                    </div>
+
+                   <div class="row signature_font1">
+                    <div class="col-12">
+                        <div class="form-check form-check-inline lbl-width-70">
+                            <label class="form-check-label" for="campus"><strong>Purpose/Subject:</strong></label>
+                        </div>
+                       <div class="form-check form-check-inline">
+                           <span class="text-nowrap" t-field="o.reason_for_requisition"/>
+                       </div>
+                    </div>
+                   </div>
+
+
+                    <table class="table table-sm col-12 table-bordered table_font1" style="padding:0px;margin-top:10px;">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Barcode/ISBN</th>
+                                <th>Description</th>
+                                <th style="width:70px">Qty</th>
+                                <th style="width:70px">UOM</th>
+                                <th>Vendors</th>
+                                <th>Extended Cost</th>
+                            </tr>
+                        </thead>
+                        <t t-set="total" t-value="0"/>
+                        <tbody>
+                            <t t-foreach="o.requisition_line_ids" t-as="requisition">
+                                <t t-set="total" t-value="total+requisition.amount"/>
+                            <tr>
+
+                                <td>
+                                    <span t-field="requisition.product_id.code" />
+                                </td>
+                                <td class="text-nowrap">
+                                    <span t-field="requisition.product_id.barcode" />
+                                </td>
+                                <td>
+                                    <span t-field="requisition.description" />
+                                </td>
+                                <td>
+                                    <span t-esc="int(requisition.qty)" />
+                                </td>
+                                <td>
+                                    <span t-field="requisition.uom_id.name" />
+                                </td>
+                                 <td>
+                                    <span t-field="requisition.vendor_id.name" />
+                                </td>
+                                 <td class="text-right">
+                                   <span t-field="o.currency_id.symbol"/> <span t-esc="requisition.amount" t-options='{"widget": "float", "precision": 2}'/>
+                                </td>
+                            </tr>
+                            </t>
+                            <tr>
+                                <td colspan="5">Amount in Word: <span t-esc="o.currency_id.amount_to_text(total)"/>&#160;   only</td>
+                                <td class="text-right">Total in <span t-field="o.currency_id.name"/></td>
+                                <td class="text-right"><span t-field="o.currency_id.symbol"/> <span t-esc="total" t-options='{"widget": "float", "precision": 2}'/></td>
+                            </tr>
+
+                            <tr t-if="o.currency_id.name == 'KHR'">
+                                <td colspan="5"></td>
+                                <td class="text-right">Total in USD</td>
+                                <td class="text-right">$ <span t-esc="total/o.currency_rate" t-options='{"widget": "float", "precision": 2}'/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="row signature_font1">
+                        <div class="col-2 text-center">Approved by: </div>
+                        <div class="col-2 text-center">Endorsed by: </div>
+                        <div class="col-2 text-center">Reviewed by: </div>
+                        <div class="col-2 text-center">Checked by: </div>
+                        <div class="col-2 text-center">Endorsed by: </div>
+                        <div class="col-2 text-center">Requested by: </div>
+                    </div>
+                    <div class="row signature_font1">
+                        <div class="col-2 text-center text-nowrap">Chief Executive Officer</div>
+                       <div class="col-2 text-center">Department Head(SPT)</div>
+                        <div class="col-2 text-center">Accounting Manager</div>
+                        <div class="col-2 text-center">Accounting Supervisor</div>
+                        <div class="col-2 text-center">Department/Section Head</div>
+                    </div>
+                    <div class="row">
+                        <p>&#160;</p>
+                        <p>&#160;</p>
+                    </div>
+                    <div class="row signature_font1 text-nowrap">
+<!--                         <div class="col-3" style="margin-left:35px !important;width:210px !important"><hr/>Name : </div>-->
+<!--                         <div class="col-3" style="margin-left:20px !important;width:230px !important"><hr/>Name : </div>-->
+<!--                         <div class="col-3" style="margin-left:10px !important;width:230px !important"><hr/>Name : </div>-->
+<!--                         <div class="col-3" style="margin-left:10px !important;width:200px !important"><hr/>Name : <span t-field="o.employee_id"/></div>-->
+
+                         <div class="col-2">
+                             <div class="row">
+                                 <div class="col-2">
+
+                                 </div>
+                                <div class="col-10">
+                                   <hr/>Name :
+                                    <br/>Date:
+                                </div>
+
+                             </div>
+                         </div>
+                       <div class="col-2">
+                             <div class="row">
+                                 <div class="col-2">
+
+                                 </div>
+                                <div class="col-10">
+                                   <hr/>Name :
+                                    <br/>Date:
+                                </div>
+
+                             </div>
+                         </div>
+                        <div class="col-2">
+                             <div class="row">
+                                 <div class="col-2">
+
+                                 </div>
+                                <div class="col-10">
+                                   <hr/>Name :
+                                    <br/>Date:
+                                </div>
+
+                             </div>
+                         </div>
+                        <div class="col-2">
+                             <div class="row">
+                                 <div class="col-2">
+
+                                 </div>
+                                <div class="col-10">
+                                   <hr/>Name :
+                                    <br/>Date:
+                                </div>
+
+                             </div>
+                         </div>
+                         <div class="col-2">
+                             <div class="row">
+                                 <div class="col-2">
+
+                                 </div>
+                                <div class="col-10">
+                                   <hr/>Name :
+                                    <br/>Date:
+                                </div>
+
+                             </div>
+                         </div>
+                         <div class="col-2">
+                             <div class="row">
+                                 <div class="col-2">
+
+                                 </div>
+                                <div class="col-10">
+                                   <hr/>Name :
+                                    <br/>Date:
+                                </div>
+
+                             </div>
+                         </div>
+                    </div>
+
+
+                </div>
+            </t>
+                  </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>
+

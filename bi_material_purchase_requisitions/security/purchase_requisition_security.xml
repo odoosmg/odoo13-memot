@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+    <record model="ir.module.category" id="module_category_purchase_requisition">
+    	<field name="name">Request And Approval</field>
+        <field name="description">Helps you manage your material purchase requisition.</field>
+        <field name="sequence">3</field>
+    </record>
+    
+    <record id="group_purchase_requisition_user" model="res.groups">
+        <field name="name">MD Approve</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="category_id" ref="module_category_purchase_requisition"/>
+    </record>
+
+    <record id="group_purchase_requisition_adviser" model="res.groups">
+        <field name="name">Adviser</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="category_id" ref="module_category_purchase_requisition"/>
+    </record>
+
+     <record id="group_purchase_requisition_dmd" model="res.groups">
+        <field name="name">DMD Check</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="category_id" ref="module_category_purchase_requisition"/>
+    </record>
+
+    <record id="group_purchase_requisition_director" model="res.groups">
+        <field name="name">Director Check</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="category_id" ref="module_category_purchase_requisition"/>
+    </record>
+
+    <record id="group_requisition_department_manager" model="res.groups">
+        <field name="name">Department Check</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="category_id" ref="module_category_purchase_requisition"/>
+    </record>
+</data>
+</openerp>
+
